@@ -42,8 +42,15 @@ public class LibraryManagementApplication {
 			lsi.loanLaptop(karim, lap3);
 			lsi.loanLaptop(hamza, lap2);
 			lsi.loanLaptop(salma, lap1);
+			lsi.returnLaptop(salma, lap1);
 			lsi.returnLaptop(karim, lap3);
-			
+			lsi.returnLaptop(hamza, lap2);
+			lsi.returnLaptop(salma, lap1);
+			lsi.returnLaptop(karim, lap3);
+			lsi.returnLaptop(hamza, lap2);
+			lsi.loanLaptop(karim, lap3);
+			lsi.loanLaptop(hamza, lap2);
+			lsi.loanLaptop(salma, lap1);
 		};
 	}
 

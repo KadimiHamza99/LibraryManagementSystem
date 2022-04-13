@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import io.kadev.entities.Adherent;
 import io.kadev.entities.Laptop;
+import io.kadev.entities.LoanArchive;
 import io.kadev.entities.LoanLaptop;
 import io.kadev.repository.AdherentRepository;
 import io.kadev.repository.LaptopLoanRepository;
 import io.kadev.repository.LaptopRepository;
+import io.kadev.repository.LoanArchiveRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -26,6 +28,8 @@ public class LibraryServiceImpl implements ILibraryService{
 	private LaptopRepository laptopRepo;
 	@Autowired
 	private LaptopLoanRepository laptopLoanRepo;
+	@Autowired
+	private LoanArchiveRepository loanArchiveRepo;
 	
 	@Override
 	public void addAdherent(Adherent a) {
@@ -61,6 +65,12 @@ public class LibraryServiceImpl implements ILibraryService{
 				l.setLoanLap(ll);;
 				l.setAvailable(false);
 				laptopLoanRepo.save(ll);
+				LoanArchive archive = new LoanArchive(ll.getLaptop().getIdLaptop().toString()
+													, ll.getAdherent().getIdAdherent()
+													, LocalDate.now()
+													, ll.getReturnDate()
+									);
+				loanArchiveRepo.save(archive);
 			}
 		}
 	}

@@ -24,7 +24,7 @@ import lombok.ToString;
 @Table(name="LAPTOPS")
 public class Laptop {
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long idOrdinateur;
+	private Long idLaptop;
 	@Enumerated(EnumType.STRING)
 	private BrandEnum brand;
 	private boolean outOfOrder;
