@@ -70,6 +70,7 @@ public class LibraryServiceImpl implements ILibraryService{
 			LoanLaptop lloanLaptop = laptopLoanRepo.findByLaptop(l).get(0);
 			LoanLaptop aloanLaptop = a.getLoanLaptop();
 			if(lloanLaptop.getIdLoanLap().equals(aloanLaptop.getIdLoanLap())) {
+				System.out.println("RETURN FUNCT");
 				a.setLoanLaptop(null);
 				l.setLoanLap(null);
 				l.setAvailable(true);
@@ -77,5 +78,4 @@ public class LibraryServiceImpl implements ILibraryService{
 			}
 		}
 	}
-	
 }

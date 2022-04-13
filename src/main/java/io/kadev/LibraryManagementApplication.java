@@ -38,17 +38,11 @@ public class LibraryManagementApplication {
 			Stream.of(lap1,lap2,lap3,lap4).forEach(l->{
 				lsi.addLaptop(l);
 			});	
-			
+		
 			lsi.loanLaptop(karim, lap3);
 			lsi.loanLaptop(hamza, lap2);
 			lsi.loanLaptop(salma, lap1);
 			lsi.returnLaptop(karim, lap3);
-			lsi.loanLaptop(karim, lap4);
-			lsi.returnLaptop(salma, lap1);
-			lsi.returnLaptop(hamza, lap2);
-			lsi.loanLaptop(hamza, lap3);
-			lsi.removeAdherent(salma);
-			
 			
 		};
 	}

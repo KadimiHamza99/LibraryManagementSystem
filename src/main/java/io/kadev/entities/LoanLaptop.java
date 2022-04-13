@@ -24,10 +24,10 @@ import lombok.ToString;
 public class LoanLaptop {
 	@Id
 	private String idLoanLap;
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="adherent_id")
 	private Adherent adherent;
-	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	@OneToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="laptop_id")
 	private Laptop laptop;
 	private LocalDate returnDate;
