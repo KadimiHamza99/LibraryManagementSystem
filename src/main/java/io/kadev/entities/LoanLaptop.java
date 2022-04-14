@@ -30,12 +30,14 @@ public class LoanLaptop {
 	@JoinColumn(name="laptop_id")
 	private Laptop laptop;
 	private LocalDate returnDate;
+	private boolean isLoanExpired;
 	
 	public LoanLaptop(Adherent a,Laptop l) {
 		this.idLoanLap=UUID.randomUUID().toString();
 		this.adherent=a;
 		this.laptop=l;
 		this.returnDate= this.adherent.getSubscriptionType().equals(SubscriptionTypeEnum.PREMIUM) ? 
-				LocalDate.now().plusDays(7L) : LocalDate.now().plus(1,ChronoUnit.DAYS);
+				LocalDate.now().plusDays(2L) : LocalDate.now().plus(1L,ChronoUnit.DAYS);
+		this.isLoanExpired=false;
 	}
 }

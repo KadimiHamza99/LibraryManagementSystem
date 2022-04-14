@@ -1,5 +1,6 @@
 package io.kadev;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import io.kadev.entities.Adherent;
 import io.kadev.entities.Laptop;
+import io.kadev.entities.LoanLaptop;
 import io.kadev.entities.enums.BrandEnum;
 import io.kadev.entities.enums.StateEnum;
 import io.kadev.entities.enums.SubscriptionTypeEnum;
@@ -38,19 +40,16 @@ public class LibraryManagementApplication {
 			Stream.of(lap1,lap2,lap3,lap4).forEach(l->{
 				lsi.addLaptop(l);
 			});	
-		
-			lsi.loanLaptop(karim, lap3);
-			lsi.loanLaptop(hamza, lap2);
+			lsi.loanLaptop(karim, lap4);
+			lsi.loanLaptop(hamza, lap3);
 			lsi.loanLaptop(salma, lap1);
-			lsi.returnLaptop(salma, lap1);
-			lsi.returnLaptop(karim, lap3);
-			lsi.returnLaptop(hamza, lap2);
-			lsi.returnLaptop(salma, lap1);
-			lsi.returnLaptop(karim, lap3);
-			lsi.returnLaptop(hamza, lap2);
-			lsi.loanLaptop(karim, lap3);
-			lsi.loanLaptop(hamza, lap2);
-			lsi.loanLaptop(salma, lap1);
+//			lsi.returnLaptop(karim, lap4);
+			lsi.loanLaptop(karim, lap2);
+			
+			List<LoanLaptop> lls = lsi.getAllLaptopLoans();
+			for (LoanLaptop ll : lls) {
+				System.out.println(ll.getLaptop().getBrand());
+			}
 		};
 	}
 

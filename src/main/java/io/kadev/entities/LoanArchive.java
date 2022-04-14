@@ -19,14 +19,14 @@ public class LoanArchive {
 	@Id
 	private String idLoanArchive;
 	private String idProduct;
-	private String adherentName;
+	private String adherentId;
 	private LocalDate loanDate;
 	private LocalDate returnDate;
 	
 	public LoanArchive(String ip,String an,LocalDate ld,LocalDate rd) {
 		this.idLoanArchive=UUID.randomUUID().toString();
 		this.idProduct=ip;
-		this.adherentName=an;
+		this.adherentId=an;
 		this.loanDate=ld;
 		this.returnDate=rd;
 	}

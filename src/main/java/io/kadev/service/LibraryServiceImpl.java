@@ -1,6 +1,8 @@
 package io.kadev.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -52,6 +54,7 @@ public class LibraryServiceImpl implements ILibraryService{
 	}
 
 	@Override
+	//effectuer l'operation d'emprunt
 	public void loanLaptop(Adherent a, Laptop l) {
 		if(l.getLoanLap()==null) {
 			/*
@@ -74,18 +77,29 @@ public class LibraryServiceImpl implements ILibraryService{
 			}
 		}
 	}
+	//Methode pour rendre les pc portables empruntés
 	@Override
 	public void returnLaptop(Adherent a, Laptop l) {
+		//condition pour checker que le pc est effectivement emprunter ainsi que l'adherent emprunt deja un pc
 		if(!l.isAvailable() && a.getLoanLaptop()!=null) {
 			LoanLaptop lloanLaptop = laptopLoanRepo.findByLaptop(l).get(0);
 			LoanLaptop aloanLaptop = a.getLoanLaptop();
+			//verifier que le pc emprunter par l'adherent est le meme que le pc passer par les args de la methode
 			if(lloanLaptop.getIdLoanLap().equals(aloanLaptop.getIdLoanLap())) {
-				System.out.println("RETURN FUNCT");
 				a.setLoanLaptop(null);
 				l.setLoanLap(null);
 				l.setAvailable(true);
 				laptopLoanRepo.deleteById(lloanLaptop.getIdLoanLap());
 			}
 		}
+	}
+	//Return a list of laptops loans in progress and check if someone have exceeded the loaning time
+	public List<LoanLaptop> getAllLaptopLoans(){
+		List<LoanLaptop> returnlls = new ArrayList<LoanLaptop>();
+		laptopLoanRepo.findAll().forEach(ll->{
+			ll.setLoanExpired(LocalDate.now().isAfter(ll.getReturnDate()) ? true : false);
+			returnlls.add(ll);
+		});
+		return returnlls;
 	}
 }
