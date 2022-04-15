@@ -3,7 +3,6 @@ package io.kadev.entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,14 +21,14 @@ import lombok.ToString;
 @Entity
 @Table(name="DOCUMENTS")
 public class Document {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idDocument;
 	private String title;
 	private String author;
 	private boolean available;
 	private StateEnum state;
-//	@ManyToMany(mappedBy="documents",fetch = FetchType.EAGER)
-	@ManyToMany(fetch = FetchType.EAGER,mappedBy = "documents")
+	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "documents")
 	private List<LoanDocument> loanDocument = new ArrayList<LoanDocument>();
 	
 	public Document(String t,String a,StateEnum state) {

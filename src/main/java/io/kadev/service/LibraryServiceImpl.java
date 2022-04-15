@@ -16,6 +16,7 @@ import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanArchive;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
+import io.kadev.entities.enums.SubscriptionTypeEnum;
 import io.kadev.repository.AdherentRepository;
 import io.kadev.repository.DocumentRepository;
 import io.kadev.repository.LaptopLoanRepository;
@@ -86,7 +87,7 @@ public class LibraryServiceImpl implements ILibraryService {
 				l.setAvailable(false);
 				laptopLoanRepo.save(ll);
 				LoanArchive archive = new LoanArchive(ll.getLaptop().getIdLaptop(),
-						ll.getAdherent().getIdAdherent(), LocalDate.now(), ll.getReturnDate());
+						ll.getAdherent().getIdAdherent(), LocalDate.now(), ll.getReturnDate(), "laptop");
 				loanArchiveRepo.save(archive);
 			}
 		}
@@ -121,17 +122,25 @@ public class LibraryServiceImpl implements ILibraryService {
 		});
 		return returnlls;
 	}
+	
 	static int totalNumberDocuments=0;
+	static int loanedDocuments=0;
+	@Override
 	public void loanDocument(Adherent adherent, List<Document> documents) {
 		LibraryServiceImpl.totalNumberDocuments=0;
+		LibraryServiceImpl.loanedDocuments=0;
 		List<Document> availableDocs = documents.stream().filter(d -> d.isAvailable())
 					.collect(Collectors.toList());
-		if (LocalDate.now().isBefore(adherent.getExpirationMembershipDate())) {
+		adherent.getLoanDocument().forEach(ld->{
+			loanedDocuments+=ld.getDocuments().size();
+		});
+		int authorizedNumber = adherent.getSubscriptionType().equals(SubscriptionTypeEnum.PREMIUM) ? 14 : 7;
+		if (LocalDate.now().isBefore(adherent.getExpirationMembershipDate()) && loanedDocuments<authorizedNumber) {
 			adherent.getLoanDocument().forEach(ld->{
 				totalNumberDocuments+=ld.getDocuments().size();
 			});
 			totalNumberDocuments+=availableDocs.size();
-			if(totalNumberDocuments<=14) {
+			if(totalNumberDocuments<=authorizedNumber) {
 				LoanDocument ld = new LoanDocument(adherent,availableDocs);
 				adherent.getLoanDocument().add(ld);
 				availableDocs.forEach(d->{
@@ -144,7 +153,8 @@ public class LibraryServiceImpl implements ILibraryService {
 					LoanArchive archive = new LoanArchive(d.getIdDocument()
 									,adherent.getIdAdherent()
 									,LocalDate.now()
-									,ld.getReturnDate());
+									,ld.getReturnDate()
+									,"document");
 					loanArchiveRepo.save(archive);
 				});
 			}

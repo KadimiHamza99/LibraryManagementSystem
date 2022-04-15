@@ -23,12 +23,14 @@ public class LoanArchive {
 	private Long adherentId;
 	private LocalDate loanDate;
 	private LocalDate returnDate;
+	private String typeProduct;
 	
-	public LoanArchive(Long ip,Long an,LocalDate ld,LocalDate rd) {
+	public LoanArchive(Long ip,Long an,LocalDate ld,LocalDate rd,String tp) {
 		this.idProduct=ip;
 		this.adherentId=an;
 		this.loanDate=ld;
 		this.returnDate=rd;
+		this.typeProduct=tp;
 	}
 	
 

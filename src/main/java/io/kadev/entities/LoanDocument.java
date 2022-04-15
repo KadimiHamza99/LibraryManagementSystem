@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -30,8 +29,8 @@ public class LoanDocument {
 	private Long idLoanDocument;
 	@ManyToOne
 	private Adherent adherent;
-//	@ManyToMany(fetch = FetchType.EAGER)
-	@ManyToMany(fetch = FetchType.EAGER)
+
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name="LOAN_DOCUMENTS__DOCUMENTS",
 			   joinColumns = {@JoinColumn(name="loan_document_id")},
 			   inverseJoinColumns = {@JoinColumn(name="document_id")} 
