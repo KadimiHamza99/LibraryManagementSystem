@@ -1,11 +1,18 @@
 package io.kadev.entities;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import io.kadev.entities.enums.StateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,20 +22,21 @@ import lombok.ToString;
 @Entity
 @Table(name="DOCUMENTS")
 public class Document {
-	@Id
-	private String idDocument;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idDocument;
 	private String title;
 	private String author;
 	private boolean available;
-	private String state;
-//	private List<Loan> loans;
+	private StateEnum state;
+//	@ManyToMany(mappedBy="documents",fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER,mappedBy = "documents")
+	private List<LoanDocument> loanDocument = new ArrayList<LoanDocument>();
 	
-	public Document(String t,String a,String s) {
-		this.idDocument=UUID.randomUUID().toString();
+	public Document(String t,String a,StateEnum state) {
 		this.title=t;
 		this.author=a;
 		this.available=true;
-		this.state=s;
-//		this.loans=null;
+		this.state=state;
 	}
+	
 }

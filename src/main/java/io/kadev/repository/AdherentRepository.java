@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import io.kadev.entities.Adherent;
 
 @Repository
-public interface AdherentRepository extends JpaRepository<Adherent, String>{
+public interface AdherentRepository extends JpaRepository<Adherent, Long>{
 
 }

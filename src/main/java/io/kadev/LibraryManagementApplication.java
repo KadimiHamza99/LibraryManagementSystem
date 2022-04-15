@@ -1,5 +1,6 @@
 package io.kadev;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -9,8 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import io.kadev.entities.Adherent;
+import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
-import io.kadev.entities.LoanLaptop;
 import io.kadev.entities.enums.BrandEnum;
 import io.kadev.entities.enums.StateEnum;
 import io.kadev.entities.enums.SubscriptionTypeEnum;
@@ -33,6 +34,17 @@ public class LibraryManagementApplication {
 			Laptop lap2 = new Laptop(BrandEnum.HP,StateEnum.VERY_GOOD);
 			Laptop lap3 = new Laptop(BrandEnum.LENOVO,StateEnum.NORMAL);
 			Laptop lap4 = new Laptop(BrandEnum.MAC,StateEnum.VERY_BAD);
+			
+			Document doc1 = new Document("JAVA BRAINS","BAHAR LOP",StateEnum.GOOD);
+			Document doc2 = new Document("LARAVEL","JHON PAUL",StateEnum.VERY_GOOD);
+			Document doc3 = new Document("ANGULAR FOR DEVS","FREDERIK",StateEnum.GOOD);
+			Document doc4 = new Document("JQUERY","MOSH",StateEnum.BAD);
+			Document doc5 = new Document("REACTJS","MOSH",StateEnum.NORMAL);
+			Document doc6 = new Document("AJAX","IBRAHIM",StateEnum.GOOD);
+			Document doc7 = new Document("ORACLE","CHAOUI",StateEnum.VERY_BAD);
+			Document doc8 = new Document("MYSQL","SAMI MORAD",StateEnum.GOOD);
+			Document doc9 = new Document("PHP NOTES FOR PROFESSIONALS","MOSH",StateEnum.NORMAL);
+			Document doc10 = new Document("OOP FOR DUMBS","CHAOUI",StateEnum.NORMAL);
 	
 			Stream.of(hamza,salma,karim).forEach(a->{
 				lsi.addAdherent(a);
@@ -40,16 +52,27 @@ public class LibraryManagementApplication {
 			Stream.of(lap1,lap2,lap3,lap4).forEach(l->{
 				lsi.addLaptop(l);
 			});	
+			Stream.of(doc1,doc2,doc3,doc4,doc5,doc6,doc8,doc7,doc9,doc10).forEach(l->{
+				lsi.addDocument(l);
+			});	
+
 			lsi.loanLaptop(karim, lap4);
 			lsi.loanLaptop(hamza, lap3);
 			lsi.loanLaptop(salma, lap1);
 //			lsi.returnLaptop(karim, lap4);
 			lsi.loanLaptop(karim, lap2);
 			
-			List<LoanLaptop> lls = lsi.getAllLaptopLoans();
-			for (LoanLaptop ll : lls) {
-				System.out.println(ll.getLaptop().getBrand());
-			}
+			List<Document> docsToLoan = new ArrayList<Document>(List.of(doc1,doc4,doc7,doc9));
+			lsi.loanDocument(karim, docsToLoan);
+			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc2,doc3));
+			lsi.loanDocument(karim, docsToLoan1);
+			List<Document> docsToLoan2 = new ArrayList<Document>(List.of(doc5,doc6));
+			lsi.loanDocument(hamza, docsToLoan2);
+			
+//			List<LoanLaptop> lls = lsi.getAllLaptopLoans();
+//			for (LoanLaptop ll : lls) {
+//				System.out.println(ll.getLaptop().getBrand());
+//			}
 		};
 	}
 

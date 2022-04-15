@@ -1,13 +1,18 @@
 package io.kadev.entities;
 
 import java.time.LocalDate;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -24,8 +29,8 @@ import lombok.ToString;
 @Entity
 @Table(name="ADHERENTS")
 public class Adherent {
-	@Id
-	private String idAdherent;
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long idAdherent;
 	@Column(length=20)
 	private String fullName;
 	@Column(length=7,unique=true)
@@ -34,13 +39,14 @@ public class Adherent {
 	private LocalDate expirationMembershipDate;
 	@Enumerated(EnumType.STRING)
 	private SubscriptionTypeEnum subscriptionType;
-//	private List<Loan> loans;
 	@OneToOne(mappedBy = "adherent")
 	@JsonProperty(access = Access.READ_ONLY)
 	private LoanLaptop loanLaptop;
+	@OneToMany(mappedBy="adherent",fetch = FetchType.EAGER)
+	private List<LoanDocument> loanDocument = new ArrayList<LoanDocument>();
+
 	
 	public Adherent(String fn,String cin,SubscriptionTypeEnum st) {
-		this.idAdherent=UUID.randomUUID().toString();
 		this.fullName=fn;
 		this.cin=cin;
 		this.subscriptionDate=LocalDate.now();
