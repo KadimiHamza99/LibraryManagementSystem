@@ -5,6 +5,9 @@ public enum BrandEnum {
 	MAC,
 	LENOVO,
 	ACER,
-	AZUS,
-	MSI
+	ASUS,
+	MSI,
+	DELL,
+	XIAOMI,
+	TOSHIBA
 }

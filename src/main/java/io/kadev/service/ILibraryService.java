@@ -7,6 +7,7 @@ import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
+import io.kadev.entities.enums.StateEnum;
 
 public interface ILibraryService {
 	void addAdherent(Adherent a);
@@ -16,11 +17,12 @@ public interface ILibraryService {
 	void addDocument(Document d);
 	void removeDocument(Document d);
 	void loanLaptop(Adherent a,Laptop l);
-	void returnLaptop(Adherent a,Laptop l);
+	void returnLaptop(Adherent a,Laptop l,StateEnum s);
 	List<LoanLaptop> getAllLaptopLoans();
 	void loanDocuments(Adherent adherent, List<Document> documents);
 	void loanDocument(Adherent adherent, Document document);
 	void returnDocuments(Adherent adherent, List<Document> documents);
 	void returnDocument(Adherent adherent, Document document);
 	List<LoanDocument> getAllDocumentLoans();
+	void laptopBrokeDown(Laptop laptop);
 }

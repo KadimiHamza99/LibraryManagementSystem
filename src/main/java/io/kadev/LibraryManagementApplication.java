@@ -29,11 +29,18 @@ public class LibraryManagementApplication {
 			Adherent hamza = new Adherent("KADIMI Hamza","X401132",SubscriptionTypeEnum.PREMIUM);
 			Adherent salma = new Adherent("FARAH Salma","T618293",SubscriptionTypeEnum.STANDARD);
 			Adherent karim = new Adherent("BAADI Karim","U881392",SubscriptionTypeEnum.STANDARD);
+			Adherent fatiha = new Adherent("BENSAID Fatiha","Y466139",SubscriptionTypeEnum.PREMIUM);
+			Adherent kawtar = new Adherent("KHAMINI Kawtar","K632232",SubscriptionTypeEnum.STANDARD);
+			Adherent ali = new Adherent("BENSALEH Ali","L882892",SubscriptionTypeEnum.STANDARD);
 			
 			Laptop lap1 = new Laptop(BrandEnum.ACER,StateEnum.GOOD);
 			Laptop lap2 = new Laptop(BrandEnum.HP,StateEnum.VERY_GOOD);
 			Laptop lap3 = new Laptop(BrandEnum.LENOVO,StateEnum.NORMAL);
 			Laptop lap4 = new Laptop(BrandEnum.MAC,StateEnum.VERY_BAD);
+			Laptop lap5 = new Laptop(BrandEnum.DELL,StateEnum.VERY_GOOD);
+			Laptop lap6 = new Laptop(BrandEnum.XIAOMI,StateEnum.VERY_BAD);
+			Laptop lap7 = new Laptop(BrandEnum.ASUS,StateEnum.NORMAL);
+			Laptop lap8 = new Laptop(BrandEnum.TOSHIBA,StateEnum.NORMAL);
 			
 			Document doc1 = new Document("JAVA BRAINS","BAHAR LOP",StateEnum.GOOD);
 			Document doc2 = new Document("LARAVEL","JHON PAUL",StateEnum.VERY_GOOD);
@@ -45,37 +52,43 @@ public class LibraryManagementApplication {
 			Document doc8 = new Document("MYSQL","SAMI MORAD",StateEnum.GOOD);
 			Document doc9 = new Document("PHP NOTES FOR PROFESSIONALS","MOSH",StateEnum.NORMAL);
 			Document doc10 = new Document("OOP FOR DUMBS","CHAOUI",StateEnum.NORMAL);
+			Document doc11 = new Document("MONGODB","BAHAR LOP",StateEnum.GOOD);
+			Document doc12 = new Document("JEE","JHON PAUL",StateEnum.VERY_GOOD);
+			Document doc13 = new Document("JAVASCRIPT","FREDERIK",StateEnum.GOOD);
+			Document doc14 = new Document("NODEJS","MOSH",StateEnum.BAD);
+			Document doc15 = new Document("SVELTJS","MOSH",StateEnum.NORMAL);
+			Document doc16 = new Document("AXIOS","IBRAHIM",StateEnum.GOOD);
 	
-			Stream.of(hamza,salma,karim).forEach(a->{
+			Stream.of(hamza,salma,karim,fatiha,kawtar,ali).forEach(a->{
 				lsi.addAdherent(a);
 			});
-			Stream.of(lap1,lap2,lap3,lap4).forEach(l->{
+			Stream.of(lap1,lap2,lap3,lap4,lap5,lap6,lap7,lap8).forEach(l->{
 				lsi.addLaptop(l);
 			});	
-			Stream.of(doc1,doc2,doc3,doc4,doc5,doc6,doc8,doc7,doc9,doc10).forEach(l->{
+			Stream.of(doc1,doc2,doc3,doc4,doc5,doc6,doc8,doc7,doc9,doc10,doc11,doc12,doc13,doc14,doc15,doc16).forEach(l->{
 				lsi.addDocument(l);
 			});	
 
 			lsi.loanLaptop(karim, lap4);
 			lsi.loanLaptop(hamza, lap3);
 			lsi.loanLaptop(salma, lap1);
-//			lsi.returnLaptop(karim, lap4);
-			lsi.loanLaptop(karim, lap2);
+			lsi.returnLaptop(karim, lap4, StateEnum.BAD);
+			lsi.returnLaptop(hamza, lap3, StateEnum.NORMAL);
+			lsi.loanLaptop(ali, lap5);
+			lsi.loanLaptop(kawtar, lap6);
+			lsi.laptopBrokeDown(lap8);
+			lsi.loanLaptop(fatiha, lap8);
+			lsi.returnLaptop(ali, lap5, StateEnum.VERY_GOOD);
 			
 			List<Document> docsToLoan = new ArrayList<Document>(List.of(doc1,doc4,doc7,doc9));
-//			lsi.loanDocument(karim, doc1);
-//			lsi.loanDocument(karim, doc4);
-//			lsi.loanDocument(karim, doc8);
+			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc15,doc14,doc16,doc12));
 			lsi.loanDocuments(karim, docsToLoan);
-//			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc2,doc3));
-//			lsi.loanDocuments(karim, docsToLoan1);
-//			List<Document> docsToLoan2 = new ArrayList<Document>(List.of(doc5,doc6));
-//			lsi.loanDocuments(hamza, docsToLoan2);
+			lsi.loanDocument(hamza, doc10);
+			lsi.loanDocument(kawtar, doc14);
+			lsi.returnDocument(kawtar, doc14);
+			lsi.returnDocument(karim, doc1);
+			lsi.loanDocuments(kawtar, docsToLoan1);
 			
-//			List<LoanLaptop> lls = lsi.getAllLaptopLoans();
-//			for (LoanLaptop ll : lls) {
-//				System.out.println(ll.getLaptop().getBrand());
-//			}
 		};
 	}
 
