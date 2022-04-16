@@ -3,12 +3,10 @@ package io.kadev.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import io.kadev.entities.Adherent;
 import io.kadev.entities.Document;
@@ -16,7 +14,6 @@ import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanArchive;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
-import io.kadev.entities.enums.SubscriptionTypeEnum;
 import io.kadev.repository.AdherentRepository;
 import io.kadev.repository.DocumentRepository;
 import io.kadev.repository.LaptopLoanRepository;
@@ -123,43 +120,83 @@ public class LibraryServiceImpl implements ILibraryService {
 		return returnlls;
 	}
 	
-	static int totalNumberDocuments=0;
-	static int loanedDocuments=0;
 	@Override
-	public void loanDocument(Adherent adherent, List<Document> documents) {
-		LibraryServiceImpl.totalNumberDocuments=0;
-		LibraryServiceImpl.loanedDocuments=0;
-		List<Document> availableDocs = documents.stream().filter(d -> d.isAvailable())
-					.collect(Collectors.toList());
-		adherent.getLoanDocument().forEach(ld->{
-			loanedDocuments+=ld.getDocuments().size();
-		});
-		int authorizedNumber = adherent.getSubscriptionType().equals(SubscriptionTypeEnum.PREMIUM) ? 14 : 7;
-		if (LocalDate.now().isBefore(adherent.getExpirationMembershipDate()) && loanedDocuments<authorizedNumber) {
-			adherent.getLoanDocument().forEach(ld->{
-				totalNumberDocuments+=ld.getDocuments().size();
-			});
-			totalNumberDocuments+=availableDocs.size();
-			if(totalNumberDocuments<=authorizedNumber) {
-				LoanDocument ld = new LoanDocument(adherent,availableDocs);
-				adherent.getLoanDocument().add(ld);
-				availableDocs.forEach(d->{
-					d.setAvailable(false);
-					d.getLoanDocument().add(ld);
-					ld.getDocuments().add(d);
-				});
-				loanDocumentRepo.save(ld);
-				availableDocs.forEach(d->{
-					LoanArchive archive = new LoanArchive(d.getIdDocument()
-									,adherent.getIdAdherent()
-									,LocalDate.now()
-									,ld.getReturnDate()
-									,"document");
-					loanArchiveRepo.save(archive);
-				});
-			}
-		}
-			
+	public void loanDocument(Adherent adherent, Document document) {
+		LoanDocument ld = new LoanDocument(adherent,document);
+		document.setAvailable(false);
+		document.setLoanDocument(ld);
+		adherent.getLoanDocument().add(ld);
+		documentRepo.save(document);
 	}
+	
+	static int totalNumberDocuments=0;
+	static int loanedDocumentsNumber=0;
+	@Override
+	/*
+	 * effectuer l'operation d'emprunt des documents :
+	 * tout d'abord je verifie que les documents passer en arguments sont disponibles et apres je met le nombre des documents empruntés par
+	 * l'adherent dans la variable loanedDocuments pour checker que l'adherent n'a pas depasser le nombre limite des emprunts et je verifie
+	 * aussi que la duree d'abonnement n'est pas encorre depasser , et apres je verifie que le nombre des documents deja emprunté plus le 
+	 * nombre des documents qu il veut emprunter ne depasse pas le nombre limite des documents (je verifie aussi si le type d'abonnement est
+	 * PREMIUM ou STANDARD
+	 * */
+	public void loanDocuments(Adherent adherent, List<Document> documents) {
+		
+		
+		documents.forEach(d->{
+			loanDocument(adherent, d);
+		});
+		
+		
+		
+		
+//		LibraryServiceImpl.totalNumberDocuments=0;
+//		LibraryServiceImpl.loanedDocumentsNumber=0;
+//		List<Document> availableDocs = documents.stream().filter(d -> d.isAvailable())
+//					.collect(Collectors.toList());
+//		LoanDocument ld = new LoanDocument(adherent,availableDocs);
+//		adherent.getLoanDocument().forEach(l->{
+//			loanedDocumentsNumber+=l.getDocuments().size();
+//		});
+//		int authorizedNumber = adherent.getSubscriptionType().equals(SubscriptionTypeEnum.PREMIUM) ? 14 : 7;
+//		if (LocalDate.now().isBefore(adherent.getExpirationMembershipDate()) && loanedDocumentsNumber<authorizedNumber) {
+//			adherent.getLoanDocument().forEach(l->{
+//				totalNumberDocuments+=l.getDocuments().size();
+//			});
+//			totalNumberDocuments+=availableDocs.size();
+//			if(totalNumberDocuments<=authorizedNumber) {
+//				availableDocs.forEach(d->{
+//					d.setAvailable(false);
+//					d.setLoanDocument(ld);
+//				});
+//				documentRepo.saveAll(availableDocs);
+//				loanDocumentRepo.save(ld);
+//				availableDocs.forEach(d->{
+//					LoanArchive archive = new LoanArchive(d.getIdDocument()
+//									,adherent.getIdAdherent()
+//									,LocalDate.now()
+//									,ld.getReturnDate()
+//									,"document");
+//					loanArchiveRepo.save(archive);
+//				});
+//			}
+//		}
+	}
+	@Override
+	public void returnDocuments(Adherent adherent,List<Document> documents) {
+
+	}
+
+	@Override
+	public List<LoanDocument> getAllDocumentLoans() {
+		return null;
+	}
+
+	@Override
+	public void returnDocument(Adherent adherent, Document document) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 }

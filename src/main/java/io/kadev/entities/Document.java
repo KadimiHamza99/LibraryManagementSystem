@@ -1,14 +1,11 @@
 package io.kadev.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import io.kadev.entities.enums.StateEnum;
@@ -28,14 +25,15 @@ public class Document {
 	private String author;
 	private boolean available;
 	private StateEnum state;
-	@ManyToMany(fetch = FetchType.LAZY,mappedBy = "documents")
-	private List<LoanDocument> loanDocument = new ArrayList<LoanDocument>();
+	@OneToOne(mappedBy = "document",cascade = CascadeType.ALL)
+	private LoanDocument loanDocument;
 	
 	public Document(String t,String a,StateEnum state) {
 		this.title=t;
 		this.author=a;
 		this.available=true;
 		this.state=state;
+		this.loanDocument=null;
 	}
 	
 }

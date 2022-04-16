@@ -63,11 +63,14 @@ public class LibraryManagementApplication {
 			lsi.loanLaptop(karim, lap2);
 			
 			List<Document> docsToLoan = new ArrayList<Document>(List.of(doc1,doc4,doc7,doc9));
-			lsi.loanDocument(karim, docsToLoan);
-			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc2,doc3));
-			lsi.loanDocument(karim, docsToLoan1);
-			List<Document> docsToLoan2 = new ArrayList<Document>(List.of(doc5,doc6));
-			lsi.loanDocument(hamza, docsToLoan2);
+//			lsi.loanDocument(karim, doc1);
+//			lsi.loanDocument(karim, doc4);
+//			lsi.loanDocument(karim, doc8);
+			lsi.loanDocuments(karim, docsToLoan);
+//			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc2,doc3));
+//			lsi.loanDocuments(karim, docsToLoan1);
+//			List<Document> docsToLoan2 = new ArrayList<Document>(List.of(doc5,doc6));
+//			lsi.loanDocuments(hamza, docsToLoan2);
 			
 //			List<LoanLaptop> lls = lsi.getAllLaptopLoans();
 //			for (LoanLaptop ll : lls) {

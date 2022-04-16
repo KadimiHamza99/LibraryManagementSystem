@@ -5,6 +5,7 @@ import java.util.List;
 import io.kadev.entities.Adherent;
 import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
+import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
 
 public interface ILibraryService {
@@ -17,5 +18,9 @@ public interface ILibraryService {
 	void loanLaptop(Adherent a,Laptop l);
 	void returnLaptop(Adherent a,Laptop l);
 	List<LoanLaptop> getAllLaptopLoans();
-	void loanDocument(Adherent adherent, List<Document> documents);
+	void loanDocuments(Adherent adherent, List<Document> documents);
+	void loanDocument(Adherent adherent, Document document);
+	void returnDocuments(Adherent adherent, List<Document> documents);
+	void returnDocument(Adherent adherent, Document document);
+	List<LoanDocument> getAllDocumentLoans();
 }
