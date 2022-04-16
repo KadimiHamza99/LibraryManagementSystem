@@ -1,4 +1,4 @@
-package io.kadev.repository;
+package io.kadev.repositories;
 
 import java.util.List;
 

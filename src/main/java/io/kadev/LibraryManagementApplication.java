@@ -15,7 +15,7 @@ import io.kadev.entities.Laptop;
 import io.kadev.entities.enums.BrandEnum;
 import io.kadev.entities.enums.StateEnum;
 import io.kadev.entities.enums.SubscriptionTypeEnum;
-import io.kadev.service.LibraryServiceImpl;
+import io.kadev.services.LibraryServiceImpl;
 
 @SpringBootApplication
 public class LibraryManagementApplication {
@@ -88,6 +88,10 @@ public class LibraryManagementApplication {
 			lsi.returnDocument(kawtar, doc14);
 			lsi.returnDocument(karim, doc1);
 			lsi.loanDocuments(kawtar, docsToLoan1);
+			
+			lsi.getAllDocumentLoans().forEach(ld->{
+				System.out.println(ld.getAdherent().getFullName());
+			});
 			
 		};
 	}

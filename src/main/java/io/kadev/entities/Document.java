@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import io.kadev.entities.enums.StateEnum;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +27,7 @@ public class Document {
 	private String author;
 	private boolean available;
 	private StateEnum state;
+	@JsonIgnore
 	@OneToOne(mappedBy = "document",cascade = CascadeType.ALL)
 	private LoanDocument loanDocument;
 	

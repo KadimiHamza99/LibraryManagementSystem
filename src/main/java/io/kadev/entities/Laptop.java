@@ -9,8 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.kadev.entities.enums.BrandEnum;
 import io.kadev.entities.enums.StateEnum;
@@ -32,7 +31,8 @@ public class Laptop {
 	@Enumerated(EnumType.STRING)
 	private StateEnum state;
 	@OneToOne(mappedBy="laptop")
-	@JsonProperty(access = Access.READ_ONLY)
+//	@JsonProperty(access = Access.READ_ONLY)
+	@JsonIgnore
 	private LoanLaptop loanLap;
 	
 	

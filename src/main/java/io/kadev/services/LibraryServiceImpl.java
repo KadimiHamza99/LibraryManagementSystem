@@ -1,4 +1,4 @@
-package io.kadev.service;
+package io.kadev.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,12 +16,12 @@ import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
 import io.kadev.entities.enums.StateEnum;
 import io.kadev.entities.enums.SubscriptionTypeEnum;
-import io.kadev.repository.AdherentRepository;
-import io.kadev.repository.DocumentRepository;
-import io.kadev.repository.LaptopLoanRepository;
-import io.kadev.repository.LaptopRepository;
-import io.kadev.repository.LoanArchiveRepository;
-import io.kadev.repository.LoanDocumentRepository;
+import io.kadev.repositories.AdherentRepository;
+import io.kadev.repositories.DocumentRepository;
+import io.kadev.repositories.LaptopLoanRepository;
+import io.kadev.repositories.LaptopRepository;
+import io.kadev.repositories.LoanArchiveRepository;
+import io.kadev.repositories.LoanDocumentRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -46,6 +46,10 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void addAdherent(Adherent a) {
 		adherentRepo.save(a);
 	}
+	
+	public List<Adherent> getAdherents(){
+		return adherentRepo.findAll();
+	}
 
 	@Override
 	public void removeAdherent(Adherent a) {
@@ -61,6 +65,11 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void removeLaptop(Laptop l) {
 		laptopRepo.delete(l);
 	}
+	
+	public List<Laptop> getLaptops(){
+		return laptopRepo.findAll();
+	}
+	
 	@Override
 	public void addDocument(Document d) {
 		documentRepo.save(d);
@@ -68,6 +77,10 @@ public class LibraryServiceImpl implements ILibraryService {
 	@Override
 	public void removeDocument(Document d) {
 		documentRepo.delete(d);
+	}
+	
+	public List<Document> getDocuments(){
+		return documentRepo.findAll();
 	}
 	
 	@Override
@@ -167,7 +180,12 @@ public class LibraryServiceImpl implements ILibraryService {
 
 	@Override
 	public List<LoanDocument> getAllDocumentLoans() {
-		return null;
+		List<LoanDocument> returnlds = new ArrayList<LoanDocument>();
+		loanDocumentRepo.findAll().forEach(ll -> {
+			ll.setLoanExpired(LocalDate.now().isAfter(ll.getReturnDate()) ? true : false);
+			returnlds.add(ll);
+		});
+		return returnlds;
 	}
 	@Override
 	public void returnDocument(Adherent adherent, Document document) {
@@ -190,6 +208,10 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void laptopBrokeDown(Laptop laptop) {
 		laptop.setOutOfOrder(true);
 		laptopRepo.save(laptop);
+	}
+	
+	public List<LoanArchive> getArchives(){
+		return loanArchiveRepo.findAll();
 	}
 
 

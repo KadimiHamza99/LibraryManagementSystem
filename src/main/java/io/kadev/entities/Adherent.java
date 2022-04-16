@@ -16,8 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import io.kadev.entities.enums.SubscriptionTypeEnum;
 import lombok.AllArgsConstructor;
@@ -40,9 +39,11 @@ public class Adherent {
 	@Enumerated(EnumType.STRING)
 	private SubscriptionTypeEnum subscriptionType;
 	@OneToOne(mappedBy = "adherent")
-	@JsonProperty(access = Access.READ_ONLY)
+//	@JsonProperty(access = Access.READ_ONLY)
+	@JsonIgnore
 	private LoanLaptop loanLaptop;
 	@OneToMany(mappedBy="adherent",fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<LoanDocument> loanDocument = new ArrayList<LoanDocument>();
 
 	
