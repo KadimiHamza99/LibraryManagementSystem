@@ -88,10 +88,7 @@ public class LibraryManagementApplication {
 			lsi.returnDocument(kawtar, doc14);
 			lsi.returnDocument(karim, doc1);
 			lsi.loanDocuments(kawtar, docsToLoan1);
-			
-			lsi.getAllDocumentLoans().forEach(ld->{
-				System.out.println(ld.getAdherent().getFullName());
-			});
+
 			
 		};
 	}

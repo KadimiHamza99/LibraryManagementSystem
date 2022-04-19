@@ -3,9 +3,10 @@ package io.kadev.services;
 import java.util.List;
 
 import io.kadev.entities.Adherent;
+import io.kadev.entities.ArchiveDocumentResponse;
+import io.kadev.entities.ArchiveLaptopResponse;
 import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
-import io.kadev.entities.LoanArchive;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
 import io.kadev.entities.enums.StateEnum;
@@ -35,5 +36,6 @@ public interface ILibraryService {
 	void returnDocument(Adherent adherent, Document document);
 	List<LoanDocument> getAllDocumentLoans();
 	//archive
-	List<LoanArchive> getArchives();
+	List<ArchiveDocumentResponse> getDocArchives();
+	List<ArchiveLaptopResponse> getLapArchives();
 }

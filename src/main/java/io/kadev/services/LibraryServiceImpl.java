@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.kadev.entities.Adherent;
+import io.kadev.entities.ArchiveDocumentResponse;
+import io.kadev.entities.ArchiveLaptopResponse;
 import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanArchive;
@@ -46,8 +48,8 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void addAdherent(Adherent a) {
 		adherentRepo.save(a);
 	}
-	
-	public List<Adherent> getAdherents(){
+
+	public List<Adherent> getAdherents() {
 		return adherentRepo.findAll();
 	}
 
@@ -65,24 +67,25 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void removeLaptop(Laptop l) {
 		laptopRepo.delete(l);
 	}
-	
-	public List<Laptop> getLaptops(){
+
+	public List<Laptop> getLaptops() {
 		return laptopRepo.findAll();
 	}
-	
+
 	@Override
 	public void addDocument(Document d) {
 		documentRepo.save(d);
 	}
+
 	@Override
 	public void removeDocument(Document d) {
 		documentRepo.delete(d);
 	}
-	
-	public List<Document> getDocuments(){
+
+	public List<Document> getDocuments() {
 		return documentRepo.findAll();
 	}
-	
+
 	@Override
 	// effectuer l'operation d'emprunt
 	public void loanLaptop(Adherent a, Laptop l) {
@@ -98,8 +101,8 @@ public class LibraryServiceImpl implements ILibraryService {
 				l.setLoanLap(ll);
 				l.setAvailable(false);
 				laptopLoanRepo.save(ll);
-				LoanArchive archive = new LoanArchive(ll.getLaptop().getIdLaptop(),
-						ll.getAdherent().getIdAdherent(), LocalDate.now(), ll.getReturnDate(), "laptop");
+				LoanArchive archive = new LoanArchive(ll.getLaptop().getIdLaptop(), ll.getAdherent().getIdAdherent(),
+						LocalDate.now(), ll.getReturnDate(), "laptop");
 				loanArchiveRepo.save(archive);
 			}
 		}
@@ -107,7 +110,7 @@ public class LibraryServiceImpl implements ILibraryService {
 
 	// Methode pour rendre les pc portables empruntés
 	@Override
-	public void returnLaptop(Adherent a, Laptop l,StateEnum s) {
+	public void returnLaptop(Adherent a, Laptop l, StateEnum s) {
 		// condition pour checker que le pc est effectivement emprunter ainsi que
 		// l'adherent emprunt deja un pc
 		if (!l.isAvailable() && a.getLoanLaptop() != null) {
@@ -135,45 +138,43 @@ public class LibraryServiceImpl implements ILibraryService {
 		});
 		return returnlls;
 	}
-	
+
 	/*
-	 * effectuer l'operation d'emprunt des documents :
-	 * tout d'abord je verifie que les documents passer en arguments sont disponibles et apres je met le nombre des documents empruntés par
-	 * l'adherent dans la variable loanedDocuments pour checker que l'adherent n'a pas depasser le nombre limite des emprunts et je verifie
-	 * aussi que la duree d'abonnement n'est pas encorre depasser , et apres je verifie que le nombre des documents deja emprunté plus le 
-	 * nombre des documents qu il veut emprunter ne depasse pas le nombre limite des documents (je verifie aussi si le type d'abonnement est
-	 * PREMIUM ou STANDARD
-	 * */
+	 * effectuer l'operation d'emprunt des documents : tout d'abord je verifie que
+	 * les documents passer en arguments sont disponibles et apres je met le nombre
+	 * des documents empruntés par l'adherent dans la variable loanedDocuments pour
+	 * checker que l'adherent n'a pas depasser le nombre limite des emprunts et je
+	 * verifie aussi que la duree d'abonnement n'est pas encorre depasser , et apres
+	 * je verifie que le nombre des documents deja emprunté plus le nombre des
+	 * documents qu il veut emprunter ne depasse pas le nombre limite des documents
+	 * (je verifie aussi si le type d'abonnement est PREMIUM ou STANDARD
+	 */
 	@Override
 	public void loanDocument(Adherent adherent, Document document) {
 		int authorizedNumber = adherent.getSubscriptionType().equals(SubscriptionTypeEnum.PREMIUM) ? 7 : 4;
-		if(document.isAvailable() && adherent.getLoanDocument().size()<authorizedNumber
+		if (document.isAvailable() && adherent.getLoanDocument().size() < authorizedNumber
 				&& LocalDate.now().isBefore(adherent.getExpirationMembershipDate())) {
-			LoanDocument ld = new LoanDocument(adherent,document);
+			LoanDocument ld = new LoanDocument(adherent, document);
 			document.setAvailable(false);
 			document.setLoanDocument(ld);
 			adherent.getLoanDocument().add(ld);
 			documentRepo.save(document);
-			LoanArchive archive = new LoanArchive(document.getIdDocument()
-									,adherent.getIdAdherent()
-									,LocalDate.now()
-									,ld.getReturnDate()
-									, "document");
+			LoanArchive archive = new LoanArchive(document.getIdDocument(), adherent.getIdAdherent(), LocalDate.now(),
+					ld.getReturnDate(), "document");
 			loanArchiveRepo.save(archive);
 		}
 	}
-	
-	
+
 	@Override
 	public void loanDocuments(Adherent adherent, List<Document> documents) {
-		documents.forEach(d->{
+		documents.forEach(d -> {
 			loanDocument(adherent, d);
 		});
 	}
-	
+
 	@Override
-	public void returnDocuments(Adherent adherent,List<Document> documents) {
-		documents.forEach(d->{
+	public void returnDocuments(Adherent adherent, List<Document> documents) {
+		documents.forEach(d -> {
 			returnDocument(adherent, d);
 		});
 	}
@@ -187,12 +188,13 @@ public class LibraryServiceImpl implements ILibraryService {
 		});
 		return returnlds;
 	}
+
 	@Override
 	public void returnDocument(Adherent adherent, Document document) {
-		if(!document.isAvailable() && adherent.getLoanDocument()!=null) {
+		if (!document.isAvailable() && adherent.getLoanDocument() != null) {
 			LoanDocument dloanDocument = loanDocumentRepo.findByDocument(document).get(0);
 			List<LoanDocument> aloansDocuments = loanDocumentRepo.findByAdherent(adherent);
-			if(aloansDocuments.contains(dloanDocument)) {
+			if (aloansDocuments.contains(dloanDocument)) {
 				document.setAvailable(true);
 				document.setLoanDocument(null);
 				documentRepo.save(document);
@@ -203,16 +205,43 @@ public class LibraryServiceImpl implements ILibraryService {
 		}
 	}
 
-	
 	@Override
 	public void laptopBrokeDown(Laptop laptop) {
 		laptop.setOutOfOrder(true);
 		laptopRepo.save(laptop);
 	}
-	
-	public List<LoanArchive> getArchives(){
-		return loanArchiveRepo.findAll();
+
+	@Override
+	public List<ArchiveDocumentResponse> getDocArchives() {
+		List<ArchiveDocumentResponse> adrs = new ArrayList<ArchiveDocumentResponse>();
+		List<LoanArchive> archives = loanArchiveRepo.findAll();
+		archives.forEach(a -> {
+			if (a.getTypeProduct().equals("document")) {
+				Adherent adh = adherentRepo.findById(a.getAdherentId()).get();
+				Document doc = documentRepo.findById(a.getIdProduct()).get();
+				ArchiveDocumentResponse adr = new ArchiveDocumentResponse(doc.getTitle(), doc.getAuthor(),
+						adh.getFullName(), adh.getSubscriptionType(), a.getLoanDate(), a.getReturnDate(),
+						doc.getState());
+				adrs.add(adr);
+			}
+		});
+		return adrs;
 	}
 
-
+	@Override
+	public List<ArchiveLaptopResponse> getLapArchives() {
+		List<ArchiveLaptopResponse> alrs = new ArrayList<ArchiveLaptopResponse>();
+		List<LoanArchive> archives = loanArchiveRepo.findAll();
+		archives.forEach(a -> {
+			if(a.getTypeProduct().equals("laptop")) {
+				Adherent adh = adherentRepo.findById(a.getAdherentId()).get();
+				Laptop lap = laptopRepo.findById(a.getIdProduct()).get();
+				ArchiveLaptopResponse alr = new ArchiveLaptopResponse(lap.getBrand(), lap.isAvailable(),
+						adh.getFullName(), adh.getSubscriptionType(), a.getLoanDate(), a.getReturnDate(),
+						lap.getState());
+				alrs.add(alr);
+			}
+		});
+		return alrs;
+	}
 }

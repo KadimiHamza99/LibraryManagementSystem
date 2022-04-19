@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.kadev.entities.Laptop;
+import io.kadev.entities.LoanLaptop;
 import io.kadev.services.LibraryServiceImpl;
 
 @RestController
-@RequestMapping("/laptops")
-public class LaptopController {
+@RequestMapping("/laptops_loans")
+public class LaptopLoanController {
 	@Autowired
 	private LibraryServiceImpl lsi;
-	@GetMapping("/get")
-	public List<Laptop> getAllLaptops(){
-		return lsi.getLaptops();
+	@GetMapping("get")
+	public List<LoanLaptop> getLaptopsLoans(){
+		return lsi.getAllLaptopLoans();
 	}
 }
