@@ -10,6 +10,7 @@ import io.kadev.entities.Document;
 import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
+import io.kadev.entities.enums.BrandEnum;
 import io.kadev.entities.enums.StateEnum;
 import io.kadev.entities.enums.SubscriptionTypeEnum;
 
@@ -21,6 +22,7 @@ public interface ILibraryService {
 	Adherent getAdherent(Long adhId);
 	void extendMembershipAdherent(Long idAdherent,LocalDate expirationMembership,SubscriptionTypeEnum ste);
 	List<Adherent> getAdherents();
+	List<Adherent> searchAdherents(String search);
 	//laptop
 	void addLaptop(Laptop l);
 	void removeLaptop(Laptop l);
@@ -43,4 +45,6 @@ public interface ILibraryService {
 	//archive
 	List<ArchiveDocumentResponse> getDocArchives();
 	List<ArchiveLaptopResponse> getLapArchives();
+	List<ArchiveDocumentResponse> archiveDocumentSearch(String search);
+	List<ArchiveLaptopResponse> archiveLaptopSearch(String search);
 }

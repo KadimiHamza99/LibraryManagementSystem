@@ -2,7 +2,10 @@ package io.kadev.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,20 +65,34 @@ public class LibraryServiceImpl implements ILibraryService {
 	public void removeAdherent(Adherent a) {
 		adherentRepo.delete(a);
 	}
-	
+
 	@Override
 	public void removeAdherent(Long adhId) {
 		Adherent adh = adherentRepo.findById(adhId).get();
 		adherentRepo.delete(adh);
 	}
-	
+
 	@Override
-	public void extendMembershipAdherent(Long idAdh,LocalDate expirationMembership, 
-			SubscriptionTypeEnum ste) {
+	public void extendMembershipAdherent(Long idAdh, LocalDate expirationMembership, SubscriptionTypeEnum ste) {
 		Adherent adh = adherentRepo.findById(idAdh).get();
 		adh.setExpirationMembershipDate(expirationMembership);
 		adh.setSubscriptionType(ste);
 		adherentRepo.save(adh);
+	}
+
+	@Override
+	public List<Adherent> searchAdherents(String search) {
+
+		List<Adherent> listByName = getAdherents().stream()
+				.filter(a -> a.getFullName().toLowerCase().trim().startsWith(search.toLowerCase().trim()))
+				.collect(Collectors.toList());
+		List<Adherent> listByCin = getAdherents().stream()
+				.filter(a -> a.getCin().toLowerCase().trim().startsWith(search.toLowerCase().trim()))
+				.collect(Collectors.toList());
+		return Stream.concat(listByName.stream(), listByCin.stream())
+//					 .distinct()
+					 .sorted(Comparator.comparing(Adherent::getFullName))
+					 .collect(Collectors.toList());
 	}
 
 	@Override
@@ -253,7 +270,7 @@ public class LibraryServiceImpl implements ILibraryService {
 		List<ArchiveLaptopResponse> alrs = new ArrayList<ArchiveLaptopResponse>();
 		List<LoanArchive> archives = loanArchiveRepo.findAll();
 		archives.forEach(a -> {
-			if(a.getTypeProduct().equals("laptop")) {
+			if (a.getTypeProduct().equals("laptop")) {
 				Adherent adh = adherentRepo.findById(a.getAdherentId()).get();
 				Laptop lap = laptopRepo.findById(a.getIdProduct()).get();
 				ArchiveLaptopResponse alr = new ArchiveLaptopResponse(lap.getBrand(), lap.isAvailable(),
@@ -265,6 +282,36 @@ public class LibraryServiceImpl implements ILibraryService {
 		return alrs;
 	}
 
+	@Override
+	public List<ArchiveDocumentResponse> archiveDocumentSearch(String search) {
+		List<ArchiveDocumentResponse> listByAdherent = getDocArchives().stream()
+				.filter(d -> d.getAdherentName().toLowerCase().trim()
+				.startsWith(search.toLowerCase().trim()))
+				.collect(Collectors.toList());
+		List<ArchiveDocumentResponse> listByDocument = getDocArchives().stream()
+				.filter(d -> d.getTitle().toLowerCase().trim()
+				.startsWith(search.toLowerCase().trim()))
+				.collect(Collectors.toList());
+		return Stream.concat(listByAdherent.stream(), listByDocument.stream())
+					 .distinct()
+					 .sorted(Comparator.comparing(ArchiveDocumentResponse::getTitle))
+					 .collect(Collectors.toList());
+	}
 
-	
+	@Override
+	public List<ArchiveLaptopResponse> archiveLaptopSearch(String search) {
+		List<ArchiveLaptopResponse> listByAdherent = getLapArchives().stream()
+				.filter(d -> d.getAdherentName().toLowerCase().trim()
+				.startsWith(search.toString().toLowerCase().trim()))
+				.collect(Collectors.toList());
+		List<ArchiveLaptopResponse> listByLaptop = getLapArchives().stream()
+				.filter(d -> d.getBrand().toString().toLowerCase().trim()
+				.startsWith(search.toLowerCase().trim()))
+				.collect(Collectors.toList());
+		return Stream.concat(listByAdherent.stream(), listByLaptop.stream())
+					 .distinct()
+					 .sorted(Comparator.comparing(ArchiveLaptopResponse::getBrand))
+					 .collect(Collectors.toList());
+	}
+
 }

@@ -35,7 +35,7 @@ public class AdherentController {
 	}
 	
 	@DeleteMapping("/delete/{idAdherent}")
-	public void removeAdherent(@PathVariable("idAdherent") Long idAdherent) {
+	public void removeAdherent(@PathVariable Long idAdherent) {
 		lsi.removeAdherent(idAdherent);
 	}
 	
@@ -48,6 +48,11 @@ public class AdherentController {
 				SubscriptionTypeEnum.PREMIUM.toString().equals(subType) ? 
 						SubscriptionTypeEnum.PREMIUM : SubscriptionTypeEnum.STANDARD;
 		lsi.extendMembershipAdherent(idAdherent, extendDate, ste);
+	}
+	
+	@GetMapping("/search")
+	public List<Adherent> searchAdherent(@RequestParam String search){
+		return lsi.searchAdherents(search);
 	}
 	
 	@GetMapping("/get")
