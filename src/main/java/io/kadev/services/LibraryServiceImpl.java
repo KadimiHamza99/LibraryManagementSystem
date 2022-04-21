@@ -54,8 +54,28 @@ public class LibraryServiceImpl implements ILibraryService {
 	}
 
 	@Override
+	public Adherent getAdherent(Long adhId) {
+		return adherentRepo.findById(adhId).get();
+	}
+
+	@Override
 	public void removeAdherent(Adherent a) {
 		adherentRepo.delete(a);
+	}
+	
+	@Override
+	public void removeAdherent(Long adhId) {
+		Adherent adh = adherentRepo.findById(adhId).get();
+		adherentRepo.delete(adh);
+	}
+	
+	@Override
+	public void extendMembershipAdherent(Long idAdh,LocalDate expirationMembership, 
+			SubscriptionTypeEnum ste) {
+		Adherent adh = adherentRepo.findById(idAdh).get();
+		adh.setExpirationMembershipDate(expirationMembership);
+		adh.setSubscriptionType(ste);
+		adherentRepo.save(adh);
 	}
 
 	@Override
@@ -244,4 +264,7 @@ public class LibraryServiceImpl implements ILibraryService {
 		});
 		return alrs;
 	}
+
+
+	
 }

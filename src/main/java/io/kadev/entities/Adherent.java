@@ -55,5 +55,13 @@ public class Adherent {
 		this.subscriptionType=st;
 		this.loanLaptop=null;
 	}
+	public Adherent(String fn,String cin) {
+		this.fullName=fn;
+		this.cin=cin;
+		this.subscriptionDate=LocalDate.now();
+		this.expirationMembershipDate=this.subscriptionDate.plusYears(1L);
+		this.subscriptionType=SubscriptionTypeEnum.STANDARD;
+		this.loanLaptop=null;
+	}
 	
 }

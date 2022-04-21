@@ -1,5 +1,6 @@
 package io.kadev.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import io.kadev.entities.Adherent;
@@ -10,11 +11,15 @@ import io.kadev.entities.Laptop;
 import io.kadev.entities.LoanDocument;
 import io.kadev.entities.LoanLaptop;
 import io.kadev.entities.enums.StateEnum;
+import io.kadev.entities.enums.SubscriptionTypeEnum;
 
 public interface ILibraryService {
 	//adherent
 	void addAdherent(Adherent a);
 	void removeAdherent(Adherent a);
+	void removeAdherent(Long adhId);
+	Adherent getAdherent(Long adhId);
+	void extendMembershipAdherent(Long idAdherent,LocalDate expirationMembership,SubscriptionTypeEnum ste);
 	List<Adherent> getAdherents();
 	//laptop
 	void addLaptop(Laptop l);
