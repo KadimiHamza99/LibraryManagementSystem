@@ -46,7 +46,11 @@ public class LibraryServiceImpl implements ILibraryService {
 	private LoanDocumentRepository loanDocumentRepo;
 	@Autowired
 	private DocumentRepository documentRepo;
-
+	
+	/**
+	 * ADHERENTS SECTION
+	 * **/
+	
 	@Override
 	public void addAdherent(Adherent a) {
 		adherentRepo.save(a);
@@ -68,8 +72,7 @@ public class LibraryServiceImpl implements ILibraryService {
 
 	@Override
 	public void removeAdherent(Long adhId) {
-		Adherent adh = adherentRepo.findById(adhId).get();
-		adherentRepo.delete(adh);
+		adherentRepo.deleteById(adhId);
 	}
 
 	@Override
@@ -89,29 +92,79 @@ public class LibraryServiceImpl implements ILibraryService {
 		List<Adherent> listByCin = getAdherents().stream()
 				.filter(a -> a.getCin().toLowerCase().trim().startsWith(search.toLowerCase().trim()))
 				.collect(Collectors.toList());
-		return Stream.concat(listByName.stream(), listByCin.stream())
-//					 .distinct()
+		List<Adherent> resultList = new ArrayList<Adherent>(); 
+		Stream.concat(listByName.stream(), listByCin.stream())
 					 .sorted(Comparator.comparing(Adherent::getFullName))
-					 .collect(Collectors.toList());
+					 .collect(Collectors.toList())
+					 .forEach(r->{
+						 if(!resultList.contains(r)) resultList.add(r);
+					 });
+		return resultList;
 	}
-
+	
+	/**
+	 * LAPTOPS SECTION
+	 * **/
+	
 	@Override
 	public void addLaptop(Laptop l) {
+		l.setAvailable(true);
 		laptopRepo.save(l);
+	}
+	
+	@Override
+	public Laptop getLaptop(Long id) {
+		return laptopRepo.findById(id).get();
+	}
+	
+	@Override
+	public void removeLaptop(Long idLap) {
+		laptopRepo.deleteById(idLap);
 	}
 
 	@Override
 	public void removeLaptop(Laptop l) {
 		laptopRepo.delete(l);
 	}
-
+	
+	@Override
 	public List<Laptop> getLaptops() {
 		return laptopRepo.findAll();
 	}
 
 	@Override
+	public void changeLapState(Long id,StateEnum state) {
+		Laptop l = laptopRepo.findById(id).get();
+		l.setState(state);
+		laptopRepo.save(l);
+	}
+
+	@Override
+	public void changeLapFunct(Long id) {
+		Laptop l = laptopRepo.findById(id).get();
+		l.setOutOfOrder(!l.isOutOfOrder());
+		l.setAvailable(!l.isOutOfOrder());
+		laptopRepo.save(l);
+	}
+	
+	@Override
+	public List<Laptop> getAvailableLaps(){
+		return laptopRepo.findByAvailable(true);
+	}
+	
+	/**
+	 * DOCUMENTS SECTION
+	 * **/
+	
+	@Override
 	public void addDocument(Document d) {
+		d.setAvailable(true);
 		documentRepo.save(d);
+	}
+	
+	@Override
+	public Document getDocument(Long id) {
+		return documentRepo.findById(id).get();
 	}
 
 	@Override
@@ -119,10 +172,34 @@ public class LibraryServiceImpl implements ILibraryService {
 		documentRepo.delete(d);
 	}
 
+	@Override
 	public List<Document> getDocuments() {
 		return documentRepo.findAll();
 	}
+	
 
+	@Override
+	public void removeDocument(Long id) {
+		documentRepo.deleteById(id);
+	}
+
+	@Override
+	public List<Document> getAvailableDocs() {
+		return documentRepo.findAll().stream()
+				.filter(d->d.isAvailable()==true).collect(Collectors.toList());
+	}
+
+	@Override
+	public void changeDocState(Long id, StateEnum state) {
+		Document doc = documentRepo.findById(id).get();
+		doc.setState(state);
+		documentRepo.save(doc);
+	}
+
+	/**
+	 * LOAN LAPTOP SECTION
+	 * **/
+	
 	@Override
 	// effectuer l'operation d'emprunt
 	public void loanLaptop(Adherent a, Laptop l) {
@@ -242,12 +319,11 @@ public class LibraryServiceImpl implements ILibraryService {
 		}
 	}
 
-	@Override
-	public void laptopBrokeDown(Laptop laptop) {
-		laptop.setOutOfOrder(true);
-		laptopRepo.save(laptop);
-	}
 
+	/**
+	 * ARCHIVE SECTION
+	 * **/
+	
 	@Override
 	public List<ArchiveDocumentResponse> getDocArchives() {
 		List<ArchiveDocumentResponse> adrs = new ArrayList<ArchiveDocumentResponse>();
