@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +26,7 @@ public class DocumentLoanController {
 	
 	@PostMapping("/loan/docs")
 	public void loanDocuments(@RequestParam Long idAdh
-							,@RequestBody List<Long> idDocs) {
+							,@RequestParam(value = "id") List<Long> idDocs) {
 		lsi.loanDocuments(idAdh, idDocs);
 	}
 	
@@ -35,12 +34,6 @@ public class DocumentLoanController {
 	public void returnDocument(@RequestParam(name = "idAdh") Long idAdh
 							  ,@RequestParam(name = "idDoc") Long idDoc) {
 		lsi.returnDocument(idAdh, idDoc);
-	}
-	
-	@PostMapping("/return/docs")
-	public void returnDocuments(@RequestParam Long idAdh
-							  ,@RequestBody List<Long> idDocs) {
-		lsi.returnDocuments(idAdh, idDocs);
 	}
 	
 	@GetMapping("/get")

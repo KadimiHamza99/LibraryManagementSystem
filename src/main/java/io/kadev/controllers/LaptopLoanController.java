@@ -32,7 +32,7 @@ public class LaptopLoanController {
 		StateEnum st = null;
 		StateEnum[] states = StateEnum.values();
 		for (StateEnum s : states) {
-			if(s.toString().equals(state)) st = s;
+			if(s.toString().toLowerCase().equals(state.toLowerCase().trim())) st = s;
 		}
 		lsi.returnLaptop(idAdh, idLap, st);
 	}

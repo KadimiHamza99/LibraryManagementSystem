@@ -60,5 +60,4 @@ public class LaptopController {
 		return lsi.getLaptops();
 	}
 	
-	
 }

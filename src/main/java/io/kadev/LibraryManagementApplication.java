@@ -66,11 +66,7 @@ public class LibraryManagementApplication {
 			Stream.of(doc1,doc2,doc3,doc4,doc5,doc6,doc8,doc7,doc9,doc10,doc11,doc12,doc13,doc14,doc15,doc16).forEach(l->{
 				lsi.addDocument(l);
 			});	
-//			
-//			lsi.loanDocument(hamza, doc16);
-//			lsi.loanDocument(hamza, doc12);
-//			lsi.loanDocument(ali, doc15);
-//			lsi.loanDocument(salma, doc10);
+
 		};
 	}
 
