@@ -244,6 +244,7 @@ public class LibraryServiceImpl implements ILibraryService {
 
 	// Return a list of laptops loans in progress and check if someone have exceeded
 	// the loaning time
+	@Override
 	public List<LoanLaptop> getAllLaptopLoans() {
 		List<LoanLaptop> returnlls = new ArrayList<LoanLaptop>();
 		laptopLoanRepo.findAll().forEach(ll -> {
@@ -252,6 +253,26 @@ public class LibraryServiceImpl implements ILibraryService {
 		});
 		return returnlls;
 	}
+	
+
+	@Override
+	public void loanLaptop(Long idAdh, Long idLap) {
+		Adherent a = adherentRepo.findById(idAdh).get();
+		Laptop l = laptopRepo.findById(idLap).get();
+		loanLaptop(a, l);
+	}
+
+	@Override
+	public void returnLaptop(Long idAdh, Long idLap, StateEnum s) {
+		Adherent a = adherentRepo.findById(idAdh).get();
+		Laptop l = laptopRepo.findById(idLap).get();
+		returnLaptop(a, l, s);
+	}
+	
+	
+	/**
+	 * Document Laptop Section
+	 * **/
 
 	/*
 	 * effectuer l'operation d'emprunt des documents : tout d'abord je verifie que
@@ -317,6 +338,39 @@ public class LibraryServiceImpl implements ILibraryService {
 				loanDocumentRepo.deleteById(dloanDocument.getIdLoanDocument());
 			}
 		}
+	}
+	
+	@Override
+	public void loanDocument(Long idAdherent, Long idDocument) {
+		Adherent a = adherentRepo.findById(idAdherent).get();
+		Document d = documentRepo.findById(idDocument).get();
+		loanDocument(a, d);
+	}
+	
+	@Override
+	public void loanDocuments(Long idAdherent, List<Long> idDocuments) {
+		idDocuments.forEach(id->{
+			Document doc = documentRepo.findById(id).get();
+			Adherent adh = adherentRepo.findById(idAdherent).get();
+			loanDocument(adh, doc);
+		});
+	}
+	
+
+	@Override
+	public void returnDocuments(Long idAdherent, List<Long> idDocuments) {
+		idDocuments.forEach(id->{
+			Document doc = documentRepo.findById(id).get();
+			Adherent adh = adherentRepo.findById(idAdherent).get();
+			returnDocument(adh, doc);
+		});
+	}
+
+	@Override
+	public void returnDocument(Long idAdherent, Long idDocument) {
+		Adherent a = adherentRepo.findById(idAdherent).get();
+		Document d = documentRepo.findById(idDocument).get();
+		returnDocument(a, d);
 	}
 
 
@@ -389,5 +443,6 @@ public class LibraryServiceImpl implements ILibraryService {
 					 .sorted(Comparator.comparing(ArchiveLaptopResponse::getBrand))
 					 .collect(Collectors.toList());
 	}
+
 
 }

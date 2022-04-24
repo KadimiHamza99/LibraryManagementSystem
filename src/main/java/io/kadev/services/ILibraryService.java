@@ -41,13 +41,19 @@ public interface ILibraryService {
 	void changeDocState(Long id,StateEnum state);
 	//loan laptop
 	void loanLaptop(Adherent a,Laptop l);
-	void returnLaptop(Adherent a,Laptop l,StateEnum s);
+	void loanLaptop(Long idAdh,Long idLap);
+	void returnLaptop(Long idAdh,Long idLap,StateEnum s);
+	void returnLaptop(Adherent idAdh,Laptop idLap,StateEnum s);
 	List<LoanLaptop> getAllLaptopLoans();
 	//loan document
 	void loanDocuments(Adherent adherent, List<Document> documents);
+	void loanDocuments(Long idAdherent, List<Long> idDocuments);
 	void loanDocument(Adherent adherent, Document document);
+	void loanDocument(Long iAdherent, Long idDocument);
 	void returnDocuments(Adherent adherent, List<Document> documents);
 	void returnDocument(Adherent adherent, Document document);
+	void returnDocuments(Long idAdherent, List<Long> idDocuments);
+	void returnDocument(Long idAdherent, Long idDocument);
 	List<LoanDocument> getAllDocumentLoans();
 	//archive
 	List<ArchiveDocumentResponse> getDocArchives();

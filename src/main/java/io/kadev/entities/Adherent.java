@@ -34,6 +34,7 @@ public class Adherent {
 	private String fullName;
 	@Column(length=7,unique=true)
 	private String cin;
+	private String email = "hamza.kadimi@uit.ac.ma";
 	private LocalDate subscriptionDate;
 	private LocalDate expirationMembershipDate;
 	@Enumerated(EnumType.STRING)

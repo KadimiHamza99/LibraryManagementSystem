@@ -1,7 +1,5 @@
 package io.kadev;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.boot.CommandLineRunner;
@@ -68,27 +66,11 @@ public class LibraryManagementApplication {
 			Stream.of(doc1,doc2,doc3,doc4,doc5,doc6,doc8,doc7,doc9,doc10,doc11,doc12,doc13,doc14,doc15,doc16).forEach(l->{
 				lsi.addDocument(l);
 			});	
-
-//			lsi.loanLaptop(karim, lap4);
-//			lsi.loanLaptop(hamza, lap3);
-//			lsi.loanLaptop(salma, lap1);
-//			lsi.returnLaptop(karim, lap4, StateEnum.BAD);
-//			lsi.returnLaptop(hamza, lap3, StateEnum.NORMAL);
-//			lsi.loanLaptop(ali, lap5);
-//			lsi.loanLaptop(kawtar, lap6);
-//			lsi.loanLaptop(fatiha, lap8);
-//			lsi.returnLaptop(ali, lap5, StateEnum.VERY_GOOD);
 //			
-//			List<Document> docsToLoan = new ArrayList<Document>(List.of(doc1,doc4,doc7,doc9));
-//			List<Document> docsToLoan1 = new ArrayList<Document>(List.of(doc15,doc14,doc16,doc12));
-//			lsi.loanDocuments(karim, docsToLoan);
-//			lsi.loanDocument(hamza, doc10);
-//			lsi.loanDocument(kawtar, doc14);
-//			lsi.returnDocument(kawtar, doc14);
-//			lsi.returnDocument(karim, doc1);
-//			lsi.loanDocuments(kawtar, docsToLoan1);
-
-			
+//			lsi.loanDocument(hamza, doc16);
+//			lsi.loanDocument(hamza, doc12);
+//			lsi.loanDocument(ali, doc15);
+//			lsi.loanDocument(salma, doc10);
 		};
 	}
 
